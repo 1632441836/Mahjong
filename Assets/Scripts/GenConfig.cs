@@ -34,9 +34,17 @@ public static class GenConfig
 		typeof(WWW),
 		typeof(Light),
 		typeof(Mathf),
-		typeof(System.Collections.Generic.List<int>),
+		typeof(System.Collections.Generic.List<String>),
 		typeof(Action<string>),
-		typeof(UnityEngine.Debug)
+		typeof(UnityEngine.Debug),
+		typeof(System.Collections.Generic.List<UnityEngine.UI.Image>),
+		typeof(WaitForSeconds),
+		typeof(WaitForEndOfFrame),
+		typeof(WaitForFixedUpdate),
+		typeof(WaitForSecondsRealtime),
+		typeof(List<string>),
+		typeof(Dictionary<string, int>),
+
 	};
 
 	[CSharpCallLua]
@@ -46,7 +54,8 @@ public static class GenConfig
 		typeof(Action<string>),
 		typeof(Action<double>),
 		typeof(UnityEngine.Events.UnityAction),
-		typeof(System.Collections.IEnumerator)
+		typeof(System.Collections.IEnumerator),
+
 	};
 
 	[BlackList]

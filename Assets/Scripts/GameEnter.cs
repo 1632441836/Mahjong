@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 using System;
-
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Injection
@@ -29,6 +29,7 @@ public class GameEnter : MonoBehaviour {
 
 	// Update is called once per frame
 	void Awake () {
+		Debug.Log("===============GameEnter.Awake");
 		scriptEnv = luaEnv.NewTable ();
 
 		LuaTable meta = luaEnv.NewTable ();
@@ -40,6 +41,7 @@ public class GameEnter : MonoBehaviour {
 		foreach (var injection in injections) {
 			scriptEnv.Set (injection.name, injection.value);
 		}
+		Debug.Log ("=======");
 		Debug.Log (luaScript.text);
 		luaEnv.DoString (luaScript.text, "GameEnter", scriptEnv);
 
@@ -55,10 +57,20 @@ public class GameEnter : MonoBehaviour {
 	}
 
 	void Start () {
+		Debug.Log ("===============GameEnter.Start");
 //		Debug.Log ("start");
 		if (luaStart != null) {
 			luaStart ();
 		}
+
+		List<String> ls = new List<String>();
+
+		Debug.Log("typeof(GameObject)==" + typeof(GameObject));
+		Debug.Log("typeof(List<String>)==" + typeof(List<String>));
+		Debug.Log("typeof(List<int>)==" + typeof(List<int>));
+		Debug.Log("typeof(List<Image>)==" + typeof(List<Image>));
+		Debug.Log("typeof(Dictionary<string, Transform>)==" + typeof(Dictionary<string, Transform>));
+		Debug.Log("typeof(Dictionary<string, Sprite>)==" + typeof(Dictionary<string, Sprite>));
 	}
 
 	void Update () {
@@ -74,7 +86,7 @@ public class GameEnter : MonoBehaviour {
 	}
 
 	void OnDestory() {
-		Debug.Log ("OnDestory");
+		Debug.Log ("===============GameEnter.OnDestory");
 		if (luaOnDestroy != null) {
 			luaOnDestroy ();
 		}
