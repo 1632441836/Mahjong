@@ -10,3 +10,4 @@
   * 参数是源目录和目标目录，这个工具会自动把源目录及其子目录下所有lua后缀的文件签名，按同样的目录结构放到目标目录下；
 * 通过SignatureLoader对自己原有的CustomLoader包装后使用；
   * SignatureLoader的构造函数有两个，一个是公钥，也就是key_ras.pub里头的内容，一个是原来的Loader；
+
