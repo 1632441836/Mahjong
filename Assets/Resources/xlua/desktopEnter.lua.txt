@@ -1,0 +1,45 @@
+--desktopEnter.lua.txt
+--
+--
+--
+
+
+local gameManager = nil
+local timePanel = nil 
+local timeInstance = nil
+
+function autoRequire()
+	require("Assets/Resources/xlua/Globalvars")
+	require("Assets/Resources/xlua/class")
+	require("Assets/Resources/xlua/GameAudio")
+	require("Assets/Resources/xlua/GameManager")
+	require("Assets/Resources/xlua/Card")
+	require("Assets/Resources/xlua/Touzi")
+	require("Assets/Resources/xlua/UtilTools")
+	require("Assets/Resources/xlua/TimerPanel")
+	require("Assets/Resources/xlua/PlayerPanel")
+	require("Assets/Resources/xlua/ChooseFlowerPig")
+	require("Assets/Resources/xlua/HandCardList")
+	require("Assets/Resources/xlua/AwaitCardList")
+	require("Assets/Resources/xlua/UGUIAnimation")
+	require("Assets/Resources/xlua/ListenCardList")
+	require("Assets/Resources/xlua/MahjonAlgorithm")
+	require("Assets/Resources/xlua/HandCard")
+end
+
+function start()
+	print("===============desktopEnter.lua.start")
+	autoRequire()
+	gameManager = GameManager.getInstance()	
+	timePanel = TimerPanel.getInstance()
+end
+
+function update()
+	--print("===============desktopEnter.lua.update")
+	gameManager:update()
+	timePanel:update()
+end
+
+function ondestroy()
+    print("lua destroy")
+end
