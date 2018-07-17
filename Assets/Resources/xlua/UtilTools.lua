@@ -19,38 +19,7 @@ function UtilTools.yield_return( ... )
 end
 
 
--- data = {
---     1 = "sdfsaf",
---     2 = "dffgfg",
---     3 = {
---         1 = "fdsfds",
---     },
--- }
+
 function logger.debug(value)
-    -- local function tableToString( data,str )
-    --     str = str or ""
-    
-    --     if (type(data) == 'table') then
-    --         str = str .. tostring(data) .. " = " .. "{\n"
-    --         for k,v in pairs(data) do
-    --             str = str .. tostring(k) .. " = "
-    --             if (type(v) == 'table') then
-    --                 return tableToString(v,str)
-    --             elseif (type(v) == 'boolen') then
-    --                 local str_tmp = v or "true" or "false"
-    --                 str = str .. str_tmp .. ",\n" 
-    --             else
-    --                 str = str .. tostring(v) ..",\n" 
-    --             end
-    --         end
-    --         str = str .. "\n}"
-    --     else
-    --         str = str .. tostring(k) .. " = " .. tostring(v) .. ",\n"
-    --     end
-    --     return str
-    -- end
-
-
-    -- local tableStr = tableToString(value)
-    -- print(tableStr)
+ 
 end

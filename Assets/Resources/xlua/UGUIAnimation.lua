@@ -1,5 +1,5 @@
 -- FileName: 
--- Author:yangna
+-- Author:qiaoba
 -- Date:2018-05-22 17:16:35
 -- Purpose: 骰子的帧序列动画
 

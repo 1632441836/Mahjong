@@ -1,5 +1,5 @@
 -- FileName: 
--- Author:yangna
+-- Author:qiaoba
 -- Date:2018-05-23 14:18:42
 -- Purpose: 管理player对象，playerPanel里面包含HandCardList，AwaitCardList，ChooseFlowerPig，ListenCardList
 
@@ -20,7 +20,7 @@ function PlayerPanel:ctor()
     self._infoFlowerPigImage = nil      --Image
     self._infoNameText = nil            --Text  
     self._infoGoldText = nil            --Text
-    self._tempOutCard = nil              --Card
+    self._tempOutCard = nil             --Card
     self._isOnListenCard = false        
     self._isHuCard = false              
     self._isOnChooseFlowerPig = false

@@ -30,57 +30,12 @@ function doprint( data,key )
 end
 
 
--- data = {
---     1 = "sdfsaf",
---     2 = "dffgfg",
---     3 = {
---         1 = "fdsfds",
---     },
--- }
 
 logger = {}
 
 function logger.debug(value)
-	-- 打印table时行首有几个Tab键
-	-- local function getTabBlank( count )
-	-- 	local s = ''
-	-- 	for i=1,count do
-	-- 		s = s .. '	'
-	-- 	end
-	-- 	return s
-	-- end
 
-    -- local function tableToString( data,str,level )
-	-- 	str = str or ""
-	-- 	level = level or 0
-	-- 	if (type(data) == 'table') then
-	-- 		str = str .. "{\n"
-	-- 		for k,v in pairs(data) do
-	-- 			str = str .. getTabBlank(level)
-    --             str = str .. tostring(k) .. " = "
-	-- 			if (type(v) == 'table') then
-    --                 str = tableToString(v,str,level+1)
-    --             elseif (type(v) == 'boolen') then
-    --                 local str_tmp = v or "true" or "false"
-    --                 str = str .. str_tmp .. ",\n" 
-    --             else
-    --                 str = str .. tostring(v) ..",\n" 
-    --             end
-	-- 		end
-	-- 		str = str .. getTabBlank(level-1)
-	-- 		str = str .. "},\n"
-    --     else
-    --         str = str .. 'data' .. ",\n"
-    --     end
-    --     return str
-    -- end
-
-    -- local tableStr = tableToString(value)
-    -- print(tableStr)
 end
-
-
-
 
 
 
@@ -130,35 +85,3 @@ function tableToString_(t, level)
 end
 
 
---
--- 日志的实际输出函数
-function log(...)
-	-- local argLength = select('#', ...)
-	-- local args = {}
-	-- for i = 1, argLength do
-	-- 	local arg = select(i, ...)
-	-- 	if type(arg) == 'table' then
-	-- 		arg = tableToString_(arg)
-	-- 	end
-	-- 	args[i] = arg
-	-- end
-
-	-- local message = ""
-	-- if #args == 1 then
-	-- 	message = args[1]
-	-- else
-	-- 	message = string.format(unpack(args))
-	-- end
-	-- print(message)
-end
-
-
-local data = {
-	{1,2,3},
-	{"aa","bb"},
-	{"a",{false,{100}}},
-	"hello world",
-}
--- logger.debug({value = data})
-
--- log(data)
