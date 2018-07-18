@@ -7,7 +7,7 @@ UtilTools = {}
 function UtilTools.yield_return( ... )
     -- 把Coroutine_Runner脚本添加到Canvas上不删除
     local canvas = CS.UnityEngine.GameObject.Find("Canvas")
-    local cs_coroutine_runner = canvas.transform:Find("Coroutine_Runner")
+    local cs_coroutine_runner = canvas:GetComponent("Coroutine_Runner")
     if (not cs_coroutine_runner) then
         cs_coroutine_runner = canvas:AddComponent(typeof(CS.Coroutine_Runner))
     end

@@ -37,7 +37,7 @@ function GameAudio:Awake( ... )
     self._audioSourceBG = self._audioSources[1]
     self._audioSourceRole = self._audioSources[2]
     self._audioSourceBG.loop = true
-    -- self:PlayaudioSourceBG("bg-music")
+    self:PlayaudioSourceBG("bg-music")
 end
 
 function GameAudio:PlayaudioSourceUI(name)
@@ -46,27 +46,27 @@ function GameAudio:PlayaudioSourceUI(name)
     end
     if (self._audios[name]) then 
         self._audioSourceUI.clip = self._audios[name]
-        -- self._audioSourceUI:Play()
+        self._audioSourceUI:Play()
     end
 end
 
 function GameAudio:PlayaudioSourceBG(name)
     if (self._audios[name]) then
         self._audioSourceBG.clip = self._audios[name]
-        -- self._audioSourceBG:Play()
+        self._audioSourceBG:Play()
     end
 end
 
 function GameAudio:PlayaudioSourceRole(name)
     if (self._audios[name]) then
         self._audioSourceRole.clip = self._audios[name]
-        -- self._audioSourceRole:Play()
+        self._audioSourceRole:Play()
     end
 end
 
 function GameAudio:PlayaudioSourceAuto(name,pos)
     if (self._audios[name] and self._audioSourceRole.volume>0) then
-        -- CS.UnityEngine.AudioSource.PlayClipAtPoint(self._audios[name], pos)
+        CS.UnityEngine.AudioSource.PlayClipAtPoint(self._audios[name], pos)
     end
 end
 

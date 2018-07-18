@@ -159,18 +159,18 @@ end
 function HandCardList:AddToHandCard( card, imangName )
     -- HandCard hc = Canvas.Instantiate(self._handCard)
     -- hc_object是加载的perfab，hc模拟绑定在上面的HandCard脚本控件
-    print("------------------HandCardList:AddToHandCard-1")
+    -- print("------------------HandCardList:AddToHandCard-1")
     local hc_object = CS.UnityEngine.Canvas.Instantiate(self._handCard)
     local hc = HandCard.new()
     hc:create(hc_object)
 
-    print("------------------HandCardList:AddToHandCard-2")
+    -- print("------------------HandCardList:AddToHandCard-2")
     if (hc ~= nil) then
         local sp = nil
         hc:setCard(card)
         sp = self._headCSD[imangName]
         hc:getHandCardImage().sprite = sp
-        print("------------------HandCardList:AddToHandCard-3")
+        -- print("------------------HandCardList:AddToHandCard-3")
         if(self._currentFlowerPig == card:getCardMark() and self._target.transform.parent.name == "Me") then
             self:SetGreyCard(hc)
         elseif (card:getCardMark() == "万") then
@@ -183,17 +183,19 @@ function HandCardList:AddToHandCard( card, imangName )
             table.insert(self._tongCardList,hc)
             self:MarksCardSort(self._tongCardList)
         end
-        print("------------------HandCardList:AddToHandCard-4")
+        -- print("------------------HandCardList:AddToHandCard-4")
         if(self._newAddPoint ~= nil) then
             self._newAddHC = hc
+            -- hc:getTarget().transform:setParent(self._newAddPoint.transform)
             hc:getTarget().transform.parent = self._newAddPoint.transform
             hc:getTarget().transform.localScale = CS.UnityEngine.Vector3(1, 1, 1)
             self._newAddPoint.transform.localPosition = CS.UnityEngine.Vector3(self:GetHeadCardCount() * 35, 0, 0)
         else
+            -- hc:getTarget().transform:setParent(self._gridListPoint)
             hc:getTarget().transform.parent = self._gridListPoint
             hc:getTarget().transform.localScale = CS.UnityEngine.Vector3(1, 1, 1)
         end
-        print("------------------HandCardList:AddToHandCard-5")
+        -- print("------------------HandCardList:AddToHandCard-5")
         return true
     end
     return false
@@ -202,7 +204,7 @@ end
 
 -- return table
 function HandCardList:GetCardS()
-    print("----------HandCardList:GetCards,allcard 11")
+    -- print("----------HandCardList:GetCards,allcard 11")
 
     local allcard = {}
 
@@ -218,7 +220,7 @@ function HandCardList:GetCardS()
         allcard[#allcard+1] = hc:getCard()
     end
     
-    print("----------HandCardList:GetCards,allcard=")
+    -- print("----------HandCardList:GetCards,allcard=")
     return allcard
 end
 
@@ -344,15 +346,11 @@ function HandCardList:AutoChooseFlowerPig()
 end
 
 function HandCardList:AutoOutCard()
-    -- Card card= MahjonAlgorithm.getInstance():GoCard(GetCardS(),CurrentFlowerPig)
-    -- HandCard hc = null
-    print("--------------HandCardList_AutoOutCard_1")
-
-    local card = MahjonAlgorithm.getInstance():GoCard(self:GetCardS(),self._currentFlowerPig)
-    print("--------------HandCardList_AutoOutCard_2")
+    local card = MahjonAlgorithm.GoCard(self:GetCardS(),self._currentFlowerPig)
+    -- print("--------------HandCardList_AutoOutCard_2")
 
     local hc = nil
-    print("--------------HandCardList_AutoOutCard_3,card:getCardMark()=",card:getCardMark())
+    -- print("--------------HandCardList_AutoOutCard_3,card:getCardMark()=",card:getCardMark())
     if (card:getCardMark() == "万") then
         hc = self:CardToHandCard(self._wanCardList, card)
     elseif (card:getCardMark() == "条") then
@@ -463,7 +461,7 @@ end
 
 -- hc:HandCard类型
 function HandCardList:RemoveHandCard(hc)
-    print("-------------------HandCardList:RemoveHandCard 1")
+    -- print("-------------------HandCardList:RemoveHandCard 1")
     self._isOutCard = false
     local str = "" .. self._target.transform.parent.name .. "打出去的牌是："
     local name = hc:getCard():getName()
@@ -480,7 +478,7 @@ function HandCardList:RemoveHandCard(hc)
     self:AddToOutCardList(hc:getCard())
     CS.UnityEngine.GameObject.Destroy(hc.gameObject)
     self:HandCardSort()
-    print("-------------------HandCardList:RemoveHandCard 2")
+    -- print("-------------------HandCardList:RemoveHandCard 2")
     GameManager.getInstance():StartOutNewCard(self._newOutHC:getCard())
 end
 

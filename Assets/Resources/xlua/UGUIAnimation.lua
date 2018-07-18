@@ -145,7 +145,6 @@ function UGUIAnimation:create( target )
     self._target = target
     for i=1,20 do
         self._spriteFrames[i] = CS.UnityEngine.Resources.Load("UIs/Touzi/touzi_" .. i,typeof(CS.UnityEngine.Sprite))
-        print("-------------UGUIAnimation:create,i=,self._spriteFrames=",i,self._spriteFrames[i])
     end
 
     self:Awake()

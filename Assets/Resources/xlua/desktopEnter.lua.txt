@@ -25,6 +25,9 @@ function autoRequire()
 	require("Assets/Resources/xlua/ListenCardList")
 	require("Assets/Resources/xlua/MahjonAlgorithm")
 	require("Assets/Resources/xlua/HandCard")
+	require("Assets/Resources/xlua/GlobalNotify")
+	require("Assets/Resources/xlua/Const")
+	
 end
 
 function start()

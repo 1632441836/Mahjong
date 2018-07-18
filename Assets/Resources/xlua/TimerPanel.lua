@@ -55,7 +55,7 @@ function TimerPanel:Awake( ... )
 end
 
 function TimerPanel:update( ... )
-    print("---------TimePanel:update  self._isOnTimer=",self._isOnTimer)
+    -- print("---------TimePanel:update  self._isOnTimer=",self._isOnTimer)
     if (not self._isOnTimer) then return end
        
     if (self._timer > 0) then
@@ -69,7 +69,7 @@ end
 
 function TimerPanel:UpdateTimer( player )
     --以后我们需要服务器获得Time的值
-    print("---------TimePanel:UpdateTimer")
+    -- print("---------TimePanel:UpdateTimer")
     self._time = 9;
     self._timer = self._time;
     self._isOnTimer = true;

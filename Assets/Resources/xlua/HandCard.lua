@@ -40,9 +40,9 @@ end
 
 
 function HandCard:Awake()
-    print("------------HandCard:Awake-1")
+    -- print("------------HandCard:Awake-1")
     self._handCardImage = self._target.transform:Find("Card"):GetComponent("Image")
-    print("------------HandCard:Awake-2")
+    -- print("------------HandCard:Awake-2")
     self._rectTF = self._target.transform:Find("Card"):GetComponent("RectTransform")
 end
 
@@ -51,7 +51,7 @@ function HandCard:Start()
 end
 
 function HandCard:InitLocation()
-    print("------------HandCard:InitLocation1")
+    -- print("------------HandCard:InitLocation1")
     self._rectTF.sizeDelta = self._target.transform.parent:GetComponent("GridLayoutGroup").cellSize
     self._target.transform.localRotation = CS.UnityEngine.Quaternion.identity
     self._target.transform.localScale = CS.UnityEngine.Vector3(1, 1, 1)

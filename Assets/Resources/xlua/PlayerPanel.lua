@@ -155,12 +155,12 @@ function PlayerPanel:ListenTouchCard( card )
         self._tempOutCard = card
         self._isSelfTouch = true
         if (self._handCarde:GetCurrentFlowerPigCount() == 0) then
-            self._isHu = MahjonAlgorithm.getInstance():IsHu(self._handCarde:GetCardS())
+            self._isHu = MahjonAlgorithm.IsHu(self._handCarde:GetCardS())
         end
 
-        if (MahjonAlgorithm.getInstance():IsGang(self._handCarde:GetCardS(), card, 4)) then       --自己摸起来的四张就是暗杠
+        if (MahjonAlgorithm.IsGang(self._handCarde:GetCardS(), card, 4)) then       --自己摸起来的四张就是暗杠
             self._isGang = 1
-        elseif (MahjonAlgorithm.getInstance():IsGang(self._handCarde:getCardTypeList(), card, 3)) then  --碰了的三张牌自己摸起来一张就是加杠        
+        elseif (MahjonAlgorithm.IsGang(self._handCarde:getCardTypeList(), card, 3)) then  --碰了的三张牌自己摸起来一张就是加杠        
             self._isGang = 2
         end
 
@@ -186,16 +186,16 @@ function PlayerPanel:ListenOutCard( card )
     if (self._handCarde:getCurrentFlowerPig() ~= card:getCardMark()) then
         self._tempOutCard = card
         self._isSelfTouch = false
-        self._isPeng = MahjonAlgorithm.getInstance():IsPeng(self._handCarde:GetCardS(), card)
+        self._isPeng = MahjonAlgorithm.IsPeng(self._handCarde:GetCardS(), card)
 
-        if (MahjonAlgorithm.getInstance():IsGang(self._handCarde:GetCardS(), card, 3)) then
+        if (MahjonAlgorithm.IsGang(self._handCarde:GetCardS(), card, 3)) then
             self._isGang = 0
         end
 
         if (self._handCarde:GetCurrentFlowerPigCount() == 0) then
             local headCards = self._handCarde:GetCardS()
             table.insert(headCards,card)
-            self._isHu = MahjonAlgorithm.getInstance():IsHu(headCards)
+            self._isHu = MahjonAlgorithm.IsHu(headCards)
         end
     end
 
@@ -299,26 +299,30 @@ function PlayerPanel:EndListenCardButton()
     end
 end
 
+-- 每个玩家选择一个“条” “万” “筒”的角标
+-- 其他玩家自动选择，自己的5秒内手动选择 超过5秒自动选择
 function PlayerPanel:GetFlowerPi()
     self._isOnChooseFlowerPig = true
+
     if (self._target.transform.name == "Me") then
-        -- self._chooseFP.gameObject:SetActive(true)
         self._target.transform:Find("ChooseFlowerPigPanel").gameObject:SetActive(true)
-        -- StartCoroutine(EndFlowerPigButton())
-        util.coroutine_call(EndFlowerPigButton)
+        local coroutine_func = util.coroutine_call(function ( ... )
+            self:endFlowerPigButton()
+        end)
+        coroutine_func()
     else
         --自动选择一个花猪
         self:SetFlowerPig(self._handCarde:AutoChooseFlowerPig())
     end
 end
 
-function PlayerPanel:EndFlowerPigButton( ... )
-    local yield_return = UtilTools.yield_return
+function PlayerPanel:endFlowerPigButton( ... )
+    local yield_return = UtilTools.yield_return()
     yield_return(CS.UnityEngine.WaitForSeconds(5.5))
+
     if (self._isOnChooseFlowerPig) then
         --自动选择一个花猪
-        -- ChooseFP.gameObject.SetActive(false);
-        self._target.transform:Find("ChooseFlowerPigPanel"):SetActive(false)
+        self._target.transform:Find("ChooseFlowerPigPanel").gameObject:SetActive(false)
         self:SetFlowerPig(self._handCarde:AutoChooseFlowerPig())
     end
 end 
@@ -341,6 +345,9 @@ function PlayerPanel:Awake( target )
     self._awaitCard:create(target.transform:Find("AwaitCardList"))
 
     if (target.transform.name == "Me") then
+        GlobalNotify.addObserver(self,Const.MSG_PLAYER_SEL_FLOWERPIG, function ( param )
+            self:SetFlowerPig(param)
+        end)
         local obj = target.transform:Find("ChooseFlowerPigPanel")
         self._chooseFP = ChooseFlowerPig.new()
         self._chooseFP:create(obj)

@@ -8,12 +8,9 @@ ChooseFlowerPig = class("ChooseFlowerPig")
 
 
 function ChooseFlowerPig:ctor()
-    -- private Button tiaoButton;
-    -- private Button wanButton;
-    -- private Button tongButton;
-    self._tiaoButton = nil
-    self._wanButton = nil
-    self._tongButton = nil
+    self._tiaoButton = nil    --Button
+    self._wanButton = nil     --Button
+    self._tongButton = nil    --Button
     self._target = nil   
 end
 
@@ -27,19 +24,22 @@ end
 function ChooseFlowerPig:Start()
     self._wanButton.onClick:AddListener(function ( ... )
         GameAudio.getInstance():PlayaudioSourceRole("ui_click")
-        self._target.transform.parent:SendMessage("SetFlowerPig", "万")
+        -- self._target.transform.parent:SendMessage("SetFlowerPig", "万")
+        GlobalNotify.postNotify(Const.MSG_PLAYER_SEL_FLOWERPIG,"万")
         self._target.gameObject:SetActive(false)
     end)
     
     self._tiaoButton.onClick:AddListener(function ( ... )
         GameAudio.getInstance():PlayaudioSourceRole("ui_click")
-        self._target.transform.parent:SendMessage("SetFlowerPig", "条")
+        -- self._target.transform.parent:SendMessage("SetFlowerPig", "条")
+        GlobalNotify.postNotify(Const.MSG_PLAYER_SEL_FLOWERPIG,"条")
         self._target.gameObject:SetActive(false)
     end)
 
     self._tongButton.onClick:AddListener(function ( ... )
         GameAudio.getInstance():PlayaudioSourceRole("ui_click")
-        self._target.transform.parent:SendMessage("SetFlowerPig", "筒")
+        -- self._target.transform.parent:SendMessage("SetFlowerPig", "筒")
+        GlobalNotify.postNotify(Const.MSG_PLAYER_SEL_FLOWERPIG,"筒")
         self._target.gameObject:SetActive(false)
     end)
 end

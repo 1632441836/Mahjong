@@ -27,10 +27,15 @@ function GameManager:setCards( value )
 end
 
 function GameManager:update( ... )
-	-- if(self._newOutPoint) then
-		-- self._biaojiPoint.gameObject:SetActive(true)
-		-- self._biaojiPoint.position = CS.UnityEngine.Vector3(self._newOutPoint.position.x, self._newOutPoint.position.y + 30, self._newOutPoint.position.z)
-	-- end
+	if(self._newOutPoint) then
+		print("----------------GameManager.update")
+		if (not self._biaojiPoint) then
+			self._biaojiPoint = self._curCanvas.transform:Find("Biaoji")
+			print("----------------GameManager.update self._biaojiPoint=",self._biaojiPoint)
+		end
+		self._biaojiPoint.gameObject:SetActive(true)
+		self._biaojiPoint.position = CS.UnityEngine.Vector3(self._newOutPoint.position.x, self._newOutPoint.position.y + 30, self._newOutPoint.position.z)
+	end
 	-- 调用骰子的更新
 	Touzi.getInstance(...):Update()
 end
@@ -81,7 +86,6 @@ end
 -- tbImages：原为string []，替换成table
 -- tbSounds：原为string []，替换成table
 function GameManager:AddCard(tbImages, tbSounds)
-	print("------------GameManager.AddCard,self._cards,type(self._cards)=",type(self._cards))
 	--依次添加万子,条子,筒子
 	for i=1, 4 do
 		for j=1, #tbImages do
@@ -185,7 +189,6 @@ function GameManager:SetHitPoint()
 	else
 		self._inWhoGetCardIndex = touziOne
 	end
-	print("------------GameManager.SetHitPoint,self._inWhoGetCard=",self._inWhoGetCard)
 end
 
 function GameManager:CardDesktopShow()
@@ -196,7 +199,6 @@ function GameManager:CardDesktopShow()
 end
 
 function GameManager:CardDesktopShowOff()
-	print("-----------GameManager.CardDesktopShowOff,self._inWhoGetCard=",self._inWhoGetCard)
 	--摸牌应该逆时针摸
 	for i = 1, #self._players do
 		local indexDownList = self._players[self._inWhoGetCard]:getAwaitCard():getIndexDownList()
@@ -228,7 +230,6 @@ end
 function GameManager:InitPlayersData()
 	--如果联网的话 其实我们只需要设置自己的牌就行了 你的对手直接显示手牌界面就行了
 	--生成设置全部玩家的牌
-	print("------------GameManager:InitPlayersData--1")
 	local cout = 0
 	local zhuang = 1
 	for i=1, #self._players do
@@ -242,18 +243,10 @@ function GameManager:InitPlayersData()
 		end
 	end
 
-	print("------------GameManager:InitPlayersData--2")
 	--第一次庄家不摸牌
 	self._currentOutCardIndex = self._players[zhuang]:getMyPosIndex()
 	self._players[zhuang]:getInfoDealerImage().enabled = true
 	self._players[zhuang]:getHandCarde():setIsNoGetCard(true)
-
-
-	print("==================检测四个玩家初始化")
-	for i=1,4 do
-		local tbcards = self._players[1]:getHandCarde():GetCardS()
-		print("============检测四个玩家初始化,player[",i,"] = " , #tbcards)
-	end
 
 	return zhuang
 end
@@ -262,11 +255,9 @@ end
 -- player:PlayerPanel
 -- return:Card
 function GameManager:AssignCard(player)
-	print("------------GameManager:AssignCard--1")
 	if (#self._cards > 0) then
 		local number = math.random(1,#self._cards)
 		local card = self._cards[number]
-		print("------------GameManager:AssignCard--2")
 
 		if (player:getTargetName() == "Me") then
 			player:getHandCarde():AddToHandCard(card, card:getImageName())
@@ -277,10 +268,9 @@ function GameManager:AssignCard(player)
 		elseif (player:getTargetName() == "Last") then
 			player:getHandCarde():AddToHandCard(card, "hand_left")
 		end
-		print("------------GameManager:AssignCard--3")
+
 		self:CardDesktopShowOff()
 		table.remove(self._cards, number)
-		print("------------GameManager:AssignCard--4")
 		return card
 	else
 		return nil
@@ -290,30 +280,21 @@ end
 -- outtPoint:Transform
 function GameManager:SetBiaojiPoint(outtPoint)
 	self._newOutPoint = outtPoint
-	print("-------------------- GameManager:SetBiaojiPoint")
 end
 
 -- who:int
 function GameManager:StartTimer( who )
-	print("----------GameNamager.StartTimer, who=",who)
 	--有些时候我们调用的时候不需要摸牌（碰牌的情况下）
 	if (self._players[who]:getHandCarde():getIsNoGetCard()) then
-		print("----------GameNamager.StartTimer 1")
 		self._players[who]:getHandCarde():setIsNoGetCard(false)
-		print("----------GameNamager.StartTimer 1_1")
 		TimerPanel.getInstance():UpdateTimer(who)
-		print("----------GameNamager.StartTimer 1_2")
 		self._players[who]:getHandCarde():setIsOutCard(true)
-		print("----------GameNamager.StartTimer 1_3")
 
 		if (self._players[who]:getTargetName() ~= "Me") then
-			print("----------GameNamager.StartTimer 1_3")
 			--在单机模式下 其他玩家可以直接自动出牌
 			self._players[who]:getHandCarde():AutoOutCard()
 		end
 	else
-		print("----------GameNamager.StartTimer 2")
-		-- Card card = AssignCard(players[who]);
 		local card = self:AssignCard(self._players[who])
 		if (card) then
 			TimerPanel.getInstance():UpdateTimer(who)
@@ -327,7 +308,6 @@ function GameManager:StartTimer( who )
 end
 
 function GameManager:OverTimer()
-	print("------------------GameManager:OverTimer, self._currentOutCardIndex=",self._currentOutCardIndex)
 	--我们在这里开始检测出牌顺序和监听 1 是自己 2 是下家 3 是对家 4 是上家
 	for i=1, #self._players do
 		if (self._currentOutCardIndex == self._players[i]:getMyPosIndex()) then
@@ -397,42 +377,28 @@ end
 --给其他玩家发送听牌信息
 -- handCard:Card
 function GameManager:StartOutNewCard(handCard)
-	print("-------------------GameManager:StartOutNewCard 1")
 	--隐藏我激活的按钮
 	self._players[1]:EndListenCardButton()
 	TimerPanel.getInstance():setIsOnTimer(false)
 	GameAudio.getInstance():PlayaudioSourceUI("out_card")
 	GameAudio.getInstance():PlayaudioSourceAuto(handCard:getSoundName(),CS.UnityEngine.Camera.main.transform.position)
 
-	print("-------------------GameManager:StartOutNewCard 2")
-
 	-- 开启协程
 	local coroutine_func = util.coroutine_call(function ( ... )
-		print("-------------------GameManager:StartOutNewCard 3")
 		self:EndOutNewCard(handCard)
 	end)
 
 	coroutine_func()
 end
 
-
 -- 限制 最少1秒出牌听牌時間 7秒后强制切换牌 
 -- handCard:Card
 function GameManager:EndOutNewCard(handCard)
-
-	print("================== GameManager:EndOutNewCard 检测四个玩家初始化")
-	for i=1,4 do
-		local tbcards = self._players[1]:getHandCarde():GetCardS()
-		print("============ GameManager:EndOutNewCard 检测四个玩家初始化,player[",i,"] = " , #tbcards)
-	end
-
-	print("----------------GameManager:EndOutNewCard 1")
 	local timeStart = os.time()
 	--让服务器延迟一段时间执行
 	local yield_return = UtilTools.yield_return()
 	yield_return(CS.UnityEngine.WaitForSeconds(1))
 
-	print("----------------GameManager:EndOutNewCard 2")
 	for i = 1, #self._players do
 		-- 现在出牌的这个不会听牌
 		if (self._players[i]:getMyPosIndex() ~= self._currentOutCardIndex and self._players[i]:getIsHuCard() == false) then
@@ -442,9 +408,7 @@ function GameManager:EndOutNewCard(handCard)
 
 	local isAllListenCard = true
 
-	print("----------------GameManager:EndOutNewCard 3")
 	while (isAllListenCard) do
-		print("----------------GameManager:EndOutNewCard 4")
 		isAllListenCard = false
 		for i = 1, #self._players do
 			if (self._players[i]:getIsOnListenCard() == true) then
@@ -457,47 +421,36 @@ function GameManager:EndOutNewCard(handCard)
 			isAllListenCard = false
 		end
 		yield_return(CS.UnityEngine.WaitForEndOfFrame())
-		print("----------------GameManager:EndOutNewCard 5")
 	end
-
-	print("----------------GameManager:EndOutNewCard 6")
-
 	self:TabCurrentOutCard()
 end
 
 
 -- 协程函数体
 function GameManager:InitMatch()
-	print("-----------GameManager:InitMatch---1")
 	--设置谁是庄家
 	self:SetDealer()
-	print("-----------GameManager:InitMatch---2")
+
 	--打开显示所有麻将
 	self:CardDesktopShow() 
-	print("-----------GameManager:InitMatch---3")
+
 	Touzi.getInstance():TouziShow(true)
-	print("-----------GameManager:InitMatch---4")
 	-- 通过丢骰子设置摸牌的位置
 	self:SetHitPoint()
-	print("-----------GameManager:InitMatch---5")
 
 	local yield_return = UtilTools.yield_return()
 	yield_return(CS.UnityEngine.WaitForSeconds(3))
 	Touzi.getInstance():TouziShow(false)
-	print("-----------GameManager:InitMatch---6")
 
 	-- 初始所有玩家的数据
 	local zhuang = self:InitPlayersData()
-	print("-----------GameManager:InitMatch---7")
 	--给自己手上的牌排序
-	self._players[1]:getHandCarde():HandCardSort()
-	print("-----------GameManager:InitMatch---8")  
+	self._players[1]:getHandCarde():HandCardSort() 
 	local timeStart = os.time()
 
 	for i = 1, #self._players do
 	   self._players[i]:GetFlowerPi()
 	end
-	print("-----------GameManager:InitMatch---9")
 
 	local isAllChooseFlowerPig = true
 
@@ -514,14 +467,11 @@ function GameManager:InitMatch()
 		end
 		yield_return(CS.UnityEngine.WaitForEndOfFrame())
 	end
-	print("-----------GameManager:InitMatch---10")
 
 	--给自己手上的牌排序
 	self._players[1]:getHandCarde():HandCardSort()
-	print("-----------GameManager:InitMatch---11")
 	-- 开始计时器出牌
 	self:StartTimer(zhuang)
-	print("-----------GameManager:InitMatch---12")
 end
 
 
@@ -546,10 +496,7 @@ function GameManager:init( ... )
 	self._newOutPoint = nil
 
 	self._curCanvas = CS.UnityEngine.GameObject.FindWithTag("desktopCanvas")
-
-	-- Biaoji控件在UI上是非激活的，这种状态获取的结果是nil，不明白为什么？？？？
-	local biaojiPoint = CS.UnityEngine.GameObject.Find("Biaoji")
-	-- self._biaojiPoint = biaojiPoint:GetComponent("Transform")
+	self._biaojiPoint = self._curCanvas.transform:Find("Biaoji")
 
 	--初始化四名玩家
 	local player = CS.UnityEngine.GameObject.Find("Players")
